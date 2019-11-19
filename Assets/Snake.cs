@@ -6,8 +6,20 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
+//additional package for voice commands
+using UnityEngine.Windows.Speech;
+
 public class Snake : MonoBehaviour
 {
+    //Voice commands code
+    public string[] keywords = new string[] { "up", "down", "left", "right" };
+    public ConfidenceLevel confidence = ConfidenceLevel.Medium;
+    public float speed = 1;
+
+    public Text log;
+    protected PhraseRecognizer recognizer;
+    protected string word = "right";
+
     // Current Movement Direction
     // (by default it moves to the right)
     public GameObject foodPrefab;
@@ -30,6 +42,9 @@ public class Snake : MonoBehaviour
     // Did the snake eat something?
     bool ate = false;
 
+    // Are we using voice controls?
+    bool voiceEnable = false;
+
     // Tail Prefab
     public GameObject tailPrefab;
     // Use this for initialization
@@ -42,6 +57,15 @@ public class Snake : MonoBehaviour
         InvokeRepeating("SpawnTrap", 2, 7);
         InvokeRepeating("RemoveTrap", 60, 15);
         InvokeRepeating("Move", 0.1f, 0.1f);
+
+        ///////////////
+        if (keywords != null)
+        {
+            recognizer = new KeywordRecognizer(keywords, confidence);
+            recognizer.OnPhraseRecognized += Recognizer_OnPhraseRecognized;
+            recognizer.Start();
+        }
+        ///////////////
     }
 
     void OnTriggerEnter2D(Collider2D coll)
@@ -68,7 +92,7 @@ public class Snake : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void Update()       //change to Update(string Word). If voiceEnable == 0, use current code. Else, adapt existing logic to take string in
     {
         // Move in a new Direction?
         if (Input.GetKey(KeyCode.RightArrow) && dir != -Vector2.right)
@@ -157,6 +181,22 @@ public class Snake : MonoBehaviour
             // Add to front of list, remove from the back
             tail.Insert(0, tail.Last());
             tail.RemoveAt(tail.Count - 1);
+        }
+    }
+
+    private string Recognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)
+    {
+        word = args.text;
+        log.text = "Logged: <b>" + word + "</b>";
+        return word;
+    }
+
+    private void OnApplicationQuit()
+    {
+        if (recognizer != null && recognizer.IsRunning)
+        {
+            recognizer.OnPhraseRecognized -= Recognizer_OnPhraseRecognized;
+            recognizer.Stop();
         }
     }
 }
