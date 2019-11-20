@@ -6,11 +6,21 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 using System.Threading;
+using UnityEngine.Windows.Speech;
 
 public class Snake : MonoBehaviour
 {
-    //sound objs
+    //Voice commands code. Adds keywords array which contains words to check for. Also sets speed and confidence level. Instantiates all vars for voice
+    /*************************************************************************/
+    public string[] keywords = new string[] { "up", "down", "left", "right" };
+    public ConfidenceLevel confidence = ConfidenceLevel.Medium;
 
+    //note that initial direction is set to right to match default below for keypad controls
+    protected PhraseRecognizer recognizer;
+    protected string word = "right";
+    /*************************************************************************/
+
+    //sound objs
     public AudioSource eatSound;
 
     // Current Movement Direction
@@ -35,6 +45,12 @@ public class Snake : MonoBehaviour
     // Did the snake eat something?
     bool ate = false;
 
+    // Are we using voice controls? Sets update logic for snake movement
+    /*************************************************************************/
+    //Hard coded variable at the moment. Needs to be added to future settings page. For now, just edit the bool between runs to test both control schemes
+    bool voiceEnable = true;
+    /*************************************************************************/
+
     // Tail Prefab
     public GameObject tailPrefab;
     // Use this for initialization
@@ -47,6 +63,16 @@ public class Snake : MonoBehaviour
         InvokeRepeating("SpawnTrap", 2, 7);
         InvokeRepeating("RemoveTrap", 60, 15);
         InvokeRepeating("Move", 0.1f, 0.1f);
+
+        //Recognizer for voice controls, Passes through recognized word
+        /*************************************************************************/
+        if (keywords != null)
+        {
+            recognizer = new KeywordRecognizer(keywords, confidence);
+            recognizer.OnPhraseRecognized += Recognizer_OnPhraseRecognized;
+            recognizer.Start();
+        }
+        /*************************************************************************/
     }
 
     void OnTriggerEnter2D(Collider2D coll)
@@ -82,14 +108,32 @@ public class Snake : MonoBehaviour
     void Update()
     {
         // Move in a new Direction?
-        if (Input.GetKey(KeyCode.RightArrow) && dir != -Vector2.right)
-            dir = Vector2.right;
-        else if (Input.GetKey(KeyCode.DownArrow) && dir != Vector2.up)
-            dir = -Vector2.up;    // '-up' means 'down'
-        else if (Input.GetKey(KeyCode.LeftArrow) && dir != Vector2.right)
-            dir = -Vector2.right; // '-right' means 'left'
-        else if (Input.GetKey(KeyCode.UpArrow) && dir != -Vector2.up)
-            dir = Vector2.up;
+        if (!voiceEnable)
+        {
+            if (Input.GetKey(KeyCode.RightArrow) && dir != -Vector2.right)
+                dir = Vector2.right;
+            else if (Input.GetKey(KeyCode.DownArrow) && dir != Vector2.up)
+                dir = -Vector2.up;    // '-up' means 'down'
+            else if (Input.GetKey(KeyCode.LeftArrow) && dir != Vector2.right)
+                dir = -Vector2.right; // '-right' means 'left'
+            else if (Input.GetKey(KeyCode.UpArrow) && dir != -Vector2.up)
+                dir = Vector2.up;
+        }
+
+        //additional code to handle voice control use case. Handles all 4 directions using original logic but with different logical parameter
+        /*************************************************************************/
+        else
+        {
+            if (word == "right" && dir != -Vector2.right)
+                dir = Vector2.right;
+            else if (word == "down" && dir != Vector2.up)
+                dir = -Vector2.up;    // '-up' means 'down'
+            else if (word == "left" && dir != Vector2.right)
+                dir = -Vector2.right; // '-right' means 'left'
+            else if (word == "up" && dir != -Vector2.up)
+                dir = Vector2.up;
+        }
+        /*************************************************************************/
     }
 
     void SpawnFood()
@@ -170,4 +214,23 @@ public class Snake : MonoBehaviour
             tail.RemoveAt(tail.Count - 1);
         }
     }
+
+    //In the event that a phrase is recognized, set word to it for update logic
+    /*************************************************************************/
+    private void Recognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)
+    {
+        word = args.text;
+        //return word;
+    }
+
+    //close the recognizer instance after application quit
+    private void OnApplicationQuit()
+    {
+        if (recognizer != null && recognizer.IsRunning)
+        {
+            recognizer.OnPhraseRecognized -= Recognizer_OnPhraseRecognized;
+            recognizer.Stop();
+        }
+    }
+    /*************************************************************************/
 }
