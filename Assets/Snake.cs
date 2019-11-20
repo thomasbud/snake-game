@@ -15,6 +15,7 @@ public class Snake : MonoBehaviour
 
     public TextMeshProUGUI answerDisplay;
     public int score;
+    public static float speed;
 
     // Borders
     public Transform borderTop;
@@ -41,7 +42,7 @@ public class Snake : MonoBehaviour
         SpawnFood();
         InvokeRepeating("SpawnTrap", 2, 7);
         InvokeRepeating("RemoveTrap", 60, 15);
-        InvokeRepeating("Move", 0.1f, 0.1f);
+        InvokeRepeating("Move", speed, speed);
     }
 
     void OnTriggerEnter2D(Collider2D coll)
@@ -71,13 +72,13 @@ public class Snake : MonoBehaviour
     void Update()
     {
         // Move in a new Direction?
-        if (Input.GetKey(KeyCode.RightArrow) && dir != -Vector2.right)
+        if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) && dir != -Vector2.right)
             dir = Vector2.right;
-        else if (Input.GetKey(KeyCode.DownArrow) && dir != Vector2.up)
+        else if ((Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) && dir != Vector2.up)
             dir = -Vector2.up;    // '-up' means 'down'
-        else if (Input.GetKey(KeyCode.LeftArrow) && dir != Vector2.right)
+        else if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) && dir != Vector2.right)
             dir = -Vector2.right; // '-right' means 'left'
-        else if (Input.GetKey(KeyCode.UpArrow) && dir != -Vector2.up)
+        else if ((Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) && dir != -Vector2.up)
             dir = Vector2.up;
     }
 
