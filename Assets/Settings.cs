@@ -17,13 +17,7 @@ public class Settings : MonoBehaviour
 
     public void UsingVoice()
     {
-        if (voiceToggle.isOn)
-        {
-            voiceVal = true;
-        }
-        else {
-            voiceVal = false;
-        }
+        voiceVal = !voiceVal;
     }
     // Update is called once per frame
     void Update()

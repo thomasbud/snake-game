@@ -602,7 +602,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: ea2e6dffe412f456a97532880d62f5cc, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.303
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1952,6 +1952,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7500a6531d106422681baf7d82c80742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  keywords:
+  - up
+  - down
+  - left
+  - right
+  confidence: 1
   eatSound: {fileID: 369496453}
   foodPrefab: {fileID: 210559005728874704, guid: bd81301800f994c28b3ae6ce2d1ff4c7,
     type: 3}

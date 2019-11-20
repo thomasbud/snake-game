@@ -112,15 +112,15 @@ public class Snake : MonoBehaviour
     void Update()
     {
         // Move in a new Direction?
-        if (!voiceEnable)
+        if (false)
         {
-            if (Input.GetKey(KeyCode.RightArrow) && dir != -Vector2.right)
+            if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) && dir != -Vector2.right)
                 dir = Vector2.right;
-            else if (Input.GetKey(KeyCode.DownArrow) && dir != Vector2.up)
+            else if ((Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) && dir != Vector2.up)
                 dir = -Vector2.up;    // '-up' means 'down'
-            else if (Input.GetKey(KeyCode.LeftArrow) && dir != Vector2.right)
+            else if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) && dir != Vector2.right)
                 dir = -Vector2.right; // '-right' means 'left'
-            else if (Input.GetKey(KeyCode.UpArrow) && dir != -Vector2.up)
+            else if ((Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) && dir != -Vector2.up)
                 dir = Vector2.up;
         }
 
@@ -225,6 +225,7 @@ public class Snake : MonoBehaviour
     {
         word = args.text;
         //return word;
+        Debug.Log(word);
     }
 
     //close the recognizer instance after application quit
