@@ -48,7 +48,7 @@ public class Snake : MonoBehaviour
     // Are we using voice controls? Sets update logic for snake movement
     /*************************************************************************/
     //Hard coded variable at the moment. Needs to be added to future settings page. For now, just edit the bool between runs to test both control schemes
-    bool voiceEnable = true;
+    bool voiceEnable;
     /*************************************************************************/
 
     // Tail Prefab
@@ -57,12 +57,16 @@ public class Snake : MonoBehaviour
     void Start()
     {
         // Move the Snake every 300ms
+        if (System.Math.Abs(Settings.speedVal) < 0.0001) {
+            Settings.speedVal = 0.1f;
+        }
+        voiceEnable = Settings.voiceVal;
         score = 0;
         answerDisplay.SetText(score.ToString());
         SpawnFood();
         InvokeRepeating("SpawnTrap", 2, 7);
         InvokeRepeating("RemoveTrap", 60, 15);
-        InvokeRepeating("Move", 0.1f, 0.1f);
+        InvokeRepeating("Move", Settings.speedVal, Settings.speedVal);
 
         //Recognizer for voice controls, Passes through recognized word
         /*************************************************************************/
