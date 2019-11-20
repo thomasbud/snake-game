@@ -5,9 +5,14 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
+using System.Threading;
 
 public class Snake : MonoBehaviour
 {
+    //sound objs
+
+    public AudioSource eatSound;
+
     // Current Movement Direction
     // (by default it moves to the right)
     public GameObject foodPrefab;
@@ -15,7 +20,6 @@ public class Snake : MonoBehaviour
 
     public TextMeshProUGUI answerDisplay;
     public int score;
-    public static float speed;
 
     // Borders
     public Transform borderTop;
@@ -42,7 +46,7 @@ public class Snake : MonoBehaviour
         SpawnFood();
         InvokeRepeating("SpawnTrap", 2, 7);
         InvokeRepeating("RemoveTrap", 60, 15);
-        InvokeRepeating("Move", speed, speed);
+        InvokeRepeating("Move", 0.1f, 0.1f);
     }
 
     void OnTriggerEnter2D(Collider2D coll)
@@ -52,16 +56,22 @@ public class Snake : MonoBehaviour
         {
             // Get longer in next Move call
             ate = true;
+            eatSound.Play();
 
             // Remove the Food
             Destroy(coll.gameObject);
             score += 100;
+
+            //insert eat noise clip ehre
+
             answerDisplay.SetText(score.ToString());
             SpawnFood();
         }
         // Collided with Tail or Border
         else
         {
+            //insert death noise clip here
+
             // ToDo 'You lose' screen
             Debug.Log("You Lose");
             SceneManager.LoadScene(5);
@@ -72,13 +82,13 @@ public class Snake : MonoBehaviour
     void Update()
     {
         // Move in a new Direction?
-        if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) && dir != -Vector2.right)
+        if (Input.GetKey(KeyCode.RightArrow) && dir != -Vector2.right)
             dir = Vector2.right;
-        else if ((Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) && dir != Vector2.up)
+        else if (Input.GetKey(KeyCode.DownArrow) && dir != Vector2.up)
             dir = -Vector2.up;    // '-up' means 'down'
-        else if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) && dir != Vector2.right)
+        else if (Input.GetKey(KeyCode.LeftArrow) && dir != Vector2.right)
             dir = -Vector2.right; // '-right' means 'left'
-        else if ((Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) && dir != -Vector2.up)
+        else if (Input.GetKey(KeyCode.UpArrow) && dir != -Vector2.up)
             dir = Vector2.up;
     }
 
