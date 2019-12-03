@@ -40,7 +40,19 @@ public class Snake : MonoBehaviour
     public Transform borderLeft;
     public Transform borderRight;
 
-    Vector2 dir = Vector2.right;
+	//public KeyCode rightKey = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Right", "D"));
+	//public KeyCode upKey = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Up", "W"));
+	//public KeyCode leftKey = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Left", "A"));
+	//public KeyCode downKey = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Down", "S"));
+
+	public KeyCode rightKey;
+	public KeyCode leftKey;
+	public KeyCode downKey;
+	public KeyCode upKey;
+	private Dictionary<string, KeyCode> keyBinds = new Dictionary<string, KeyCode>();
+
+
+	Vector2 dir = Vector2.right;
 
     List<Collider2D> traps = new List<Collider2D>();
     List<Transform> tail = new List<Transform>();
@@ -59,6 +71,8 @@ public class Snake : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+		Debug.Log("Start");
+
 		// Move the Snake every 300ms
 		if (System.Math.Abs(Settings.speedVal) < 0.0001) {
             Settings.speedVal = 0.1f;
@@ -76,6 +90,8 @@ public class Snake : MonoBehaviour
 		//helpControls.SetText(controlType);
 		helpControls.SetText(controlType);
 
+		Debug.Log("Line 92");
+
 		score = 0;
         answerDisplay.SetText(score.ToString());
         SpawnFood();
@@ -83,18 +99,35 @@ public class Snake : MonoBehaviour
         InvokeRepeating("RemoveTrap", 60, 15);
         InvokeRepeating("Move", Settings.speedVal, Settings.speedVal);
 
-        //Recognizer for voice controls, Passes through recognized word
-        /*************************************************************************/
-        if (keywords != null)
+
+		KeyCode rightKey = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Right", "D"));
+		KeyCode upKey = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Up", "W"));
+		KeyCode leftKey = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Left", "A"));
+		KeyCode downKey = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Down", "S"));
+
+		keyBinds.Add("Up", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Up", "W")));
+		keyBinds.Add("Left", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Left", "A")));
+		keyBinds.Add("Down", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Down", "S")));
+		keyBinds.Add("Right", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Right", "D")));
+
+		Debug.Log(rightKey.ToString());
+		Debug.Log(upKey.ToString());
+		Debug.Log(leftKey.ToString());
+		Debug.Log(downKey.ToString());
+
+		//Recognizer for voice controls, Passes through recognized word
+		/*************************************************************************/
+		if (keywords != null)
         {
             recognizer = new KeywordRecognizer(keywords, confidence);
             recognizer.OnPhraseRecognized += Recognizer_OnPhraseRecognized;
             recognizer.Start();
         }
-        /*************************************************************************/
-    }
+		/*************************************************************************/
 
-    void OnTriggerEnter2D(Collider2D coll)
+	}
+
+	void OnTriggerEnter2D(Collider2D coll)
     {
         // Food?
         if (coll.name.StartsWith("apple"))
@@ -126,23 +159,43 @@ public class Snake : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Move in a new Direction?
-        if (true)
-        {
-            if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) && dir != -Vector2.right)
-                dir = Vector2.right;
-            else if ((Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) && dir != Vector2.up)
-                dir = -Vector2.up;    // '-up' means 'down'
-            else if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) && dir != Vector2.right)
-                dir = -Vector2.right; // '-right' means 'left'
-            else if ((Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) && dir != -Vector2.up)
-                dir = Vector2.up;
-        }
+		//Move in a new Direction?
+		//if (true)
+		//{
+		//	if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) && dir != -Vector2.right)
+		//		dir = Vector2.right;
+		//	else if ((Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)) && dir != Vector2.up)
+		//		dir = -Vector2.up;    // '-up' means 'down'
+		//	else if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) && dir != Vector2.right)
+		//		dir = -Vector2.right; // '-right' means 'left'
+		//	else if ((Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) && dir != -Vector2.up)
+		//		dir = Vector2.up;
+		//}
+		if (true)
+		{
+			if (Input.GetKey(keyBinds["Right"]))
+			{
+				Debug.Log("KEY PRESS");
+				dir = Vector2.right;
+			}
+			else if (Input.GetKey(keyBinds["Down"]))
+			{
+				dir = -Vector2.up;    // '-up' means 'down'
+			}
+			else if (Input.GetKey(keyBinds["Left"]))
+			{
+				dir = -Vector2.right; // '-right' means 'left'
+			}
+			else if (Input.GetKey(keyBinds["Up"]))
+			{
+				dir = Vector2.up;
+			}
+		}
 
-        //additional code to handle voice control use case. Handles all 4 directions using original logic but with different logical parameter
-        /*************************************************************************/
-        else
-        {
+		//additional code to handle voice control use case. Handles all 4 directions using original logic but with different logical parameter
+		/*************************************************************************/
+		else
+		{
             if (word == "right" && dir != -Vector2.right)
                 dir = Vector2.right;
             else if (word == "down" && dir != Vector2.up)
