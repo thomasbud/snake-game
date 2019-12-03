@@ -73,9 +73,16 @@ public class Settings : MonoBehaviour
 
     public void SaveKeys()
     {
-        foreach (var key in keyBinds)
+        foreach (var tempKey in keyBinds)
         {
-            PlayerPrefs.SetString(key.Key, key.Value.ToString());
+            //PlayerPrefs.SetString(tempKey.Key, tempKey.Value.ToString());
+            //string val = tempKey.Value.ToString();
+            //PlayerPrefs.SetString(tempKey.Key, val);
+            PlayerPrefs.SetString(tempKey.Key, tempKey.Value.ToString());
+            //PlayerPrefs.SetString(tempKey.Key, "W");
+            //Debug.Log(tempKey.Value.ToString());
+            //Debug.Log(PlayerPrefs.GetString("Up"));
+            Debug.Log(tempKey.Key + ": " + tempKey.Value.ToString() + ":: " + PlayerPrefs.GetString(tempKey.Key.ToString()));
         }
 
         PlayerPrefs.Save();
