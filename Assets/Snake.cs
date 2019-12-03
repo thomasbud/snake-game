@@ -140,6 +140,9 @@ public class Snake : MonoBehaviour
             Destroy(coll.gameObject);
             score += 100;
 
+            if (score == 300) {
+                SceneManager.LoadScene(9);
+            }
             //insert eat noise clip ehre
 
             answerDisplay.SetText(score.ToString());
