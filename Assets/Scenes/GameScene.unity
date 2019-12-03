@@ -947,7 +947,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 61.55, y: 260}
+  m_AnchoredPosition: {x: 61.55, y: 400.2}
   m_SizeDelta: {x: 123.1, y: 43.5}
   m_Pivot: {x: 0.5000009, y: 0.4999991}
 --- !u!1 &743516656
@@ -984,7 +984,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -62.414978, y: 258.8}
+  m_AnchoredPosition: {x: -62.414978, y: 399}
   m_SizeDelta: {x: 124.83, y: 45.9}
   m_Pivot: {x: 0.5000001, y: 0.5}
 --- !u!114 &743516658
@@ -1756,8 +1756,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 423.3, y: 103.3}
-  m_SizeDelta: {x: 123.1, y: 43.5}
+  m_AnchoredPosition: {x: 700.00024, y: -63.00003}
+  m_SizeDelta: {x: 252, y: 43.5}
   m_Pivot: {x: 0.5000009, y: 0.4999991}
 --- !u!114 &1229605519
 MonoBehaviour:
@@ -2234,8 +2234,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 424.16, y: 228.29999}
-  m_SizeDelta: {x: 124.83, y: 45.9}
+  m_AnchoredPosition: {x: 694.4, y: 105}
+  m_SizeDelta: {x: 252, y: 292.5}
   m_Pivot: {x: 0.5000001, y: 0.5}
 --- !u!114 &1667556013
 MonoBehaviour:
@@ -2288,8 +2288,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 15
-  m_fontSizeBase: 15
+  m_fontSize: 35
+  m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2305,7 +2305,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: 31
+  m_firstOverflowCharacterIndex: -1
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -2326,7 +2326,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: 2.1915283, w: 2.1909485}
   m_textInfo:
     textComponent: {fileID: 1667556013}
     characterCount: 84
