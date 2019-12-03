@@ -31,6 +31,9 @@ public class Snake : MonoBehaviour
     public TextMeshProUGUI answerDisplay;
     public int score;
 
+	public TextMeshProUGUI helpControls;
+	public string controlType;
+
     // Borders
     public Transform borderTop;
     public Transform borderBottom;
@@ -56,12 +59,24 @@ public class Snake : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        // Move the Snake every 300ms
-        if (System.Math.Abs(Settings.speedVal) < 0.0001) {
+		// Move the Snake every 300ms
+		if (System.Math.Abs(Settings.speedVal) < 0.0001) {
             Settings.speedVal = 0.1f;
         }
-        voiceEnable = Settings.voiceVal;
-        score = 0;
+		voiceEnable = Settings.voiceVal;
+
+		if (voiceEnable == false)
+		{
+			controlType = "Arrow Keys";
+		}
+		else
+		{
+			controlType = "Voice Controls";
+		}
+		//helpControls.SetText(controlType);
+		helpControls.SetText(controlType);
+
+		score = 0;
         answerDisplay.SetText(score.ToString());
         SpawnFood();
         InvokeRepeating("SpawnTrap", 2, 7);
