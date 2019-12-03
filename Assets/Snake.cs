@@ -127,7 +127,7 @@ public class Snake : MonoBehaviour
     void Update()
     {
         // Move in a new Direction?
-        if (false)
+        if (true)
         {
             if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) && dir != -Vector2.right)
                 dir = Vector2.right;
