@@ -20,6 +20,10 @@ public class Snake : MonoBehaviour
     protected string word = "right";
     /*************************************************************************/
 
+
+    public bool sandbox;
+    public AudioClip mainTheme;
+
     //sound objs
     public AudioSource eatSound;
 
@@ -33,6 +37,8 @@ public class Snake : MonoBehaviour
 
 	public TextMeshProUGUI helpControls;
 	public string controlType;
+
+    public int difficulty;
 
     // Borders
     public Transform borderTop;
@@ -66,18 +72,33 @@ public class Snake : MonoBehaviour
     bool voiceEnable;
     /*************************************************************************/
 
+    public void Sandbox()
+    {
+        sandbox = !sandbox;
+    }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+
     // Tail Prefab
     public GameObject tailPrefab;
     // Use this for initialization
     void Start()
     {
+        MusicClass.instance.StopMusic(mainTheme);
+        sandbox = false;
+   
 		Debug.Log("Start");
 
 		// Move the Snake every 300ms
 		if (System.Math.Abs(Settings.speedVal) < 0.0001) {
             Settings.speedVal = 0.1f;
         }
-		voiceEnable = Settings.voiceVal;
+        //voiceEnable = Settings.voiceVal;
+        voiceEnable = false;
 
 		if (voiceEnable == false)
 		{
@@ -95,6 +116,7 @@ public class Snake : MonoBehaviour
 		score = 0;
         answerDisplay.SetText(score.ToString());
         SpawnFood();
+
         InvokeRepeating("SpawnTrap", 2, 7);
         InvokeRepeating("RemoveTrap", 60, 15);
         InvokeRepeating("Move", Settings.speedVal, Settings.speedVal);
@@ -152,7 +174,14 @@ public class Snake : MonoBehaviour
 
             // ToDo 'You lose' screen
             Debug.Log("You Lose");
-            SceneManager.LoadScene(5);
+         
+            if (sandbox == false)
+            {
+                MusicClass.instance.PlayMusic(mainTheme);
+                SceneManager.LoadScene(5);
+            }
+
+            dir = Vector2.zero;
         }
     }
 

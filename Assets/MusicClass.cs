@@ -4,24 +4,29 @@ using UnityEngine;
 
 public class MusicClass : MonoBehaviour
 {
-    private AudioSource audioClip;
+    public AudioSource musicSource;
+    public static MusicClass instance = null;
 
-    private void Awake()
+    void Awake()
     {
-        DontDestroyOnLoad(transform.gameObject);
-        audioClip = GetComponent<AudioSource>();
-        PlayMusic();
+        if (instance == null)
+            instance = this;
+        else if (instance != this)
+            Destroy(gameObject);
+
+        DontDestroyOnLoad(gameObject);
     }
 
-    public void PlayMusic()
+    public void PlayMusic(AudioClip clip)//We don't need Play for your problem.
     {
-        if (audioClip.isPlaying) return;
-        audioClip.Play();
+        musicSource.clip = clip;
+        musicSource.Play();
     }
 
-    public void StopMusic()
+    public void StopMusic(AudioClip clip)
     {
-        audioClip.Stop();
+        musicSource.clip = clip;
+        musicSource.Stop();
     }
 
 

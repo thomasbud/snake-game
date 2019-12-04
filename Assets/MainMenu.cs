@@ -51,4 +51,9 @@ public class MainMenu : MonoBehaviour
         Application.Quit();
     }
 
+    public void onAdvanceClick()
+    {
+        SceneManager.LoadScene(9);
+    }
+
 }
