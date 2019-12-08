@@ -19,11 +19,7 @@ public class Snake : MonoBehaviour
     protected PhraseRecognizer recognizer;
     protected string word = "right";
     /*************************************************************************/
-
-
-    public bool sandbox;
-    public AudioClip mainTheme;
-
+    public AudioClip menuSong;
     //sound objs
     public AudioSource eatSound;
 
@@ -37,8 +33,6 @@ public class Snake : MonoBehaviour
 
 	public TextMeshProUGUI helpControls;
 	public string controlType;
-
-    public int difficulty;
 
     // Borders
     public Transform borderTop;
@@ -63,14 +57,8 @@ public class Snake : MonoBehaviour
     List<Collider2D> traps = new List<Collider2D>();
     List<Transform> tail = new List<Transform>();
 
-    // Did the snake eat something?
-    bool ate = false;
+    public bool sandbox;
 
-    // Are we using voice controls? Sets update logic for snake movement
-    /*************************************************************************/
-    //Hard coded variable at the moment. Needs to be added to future settings page. For now, just edit the bool between runs to test both control schemes
-    bool voiceEnable;
-    /*************************************************************************/
 
     public void Sandbox()
     {
@@ -82,23 +70,30 @@ public class Snake : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
+    // Did the snake eat something?
+    bool ate = false;
+
+    // Are we using voice controls? Sets update logic for snake movement
+    /*************************************************************************/
+    //Hard coded variable at the moment. Needs to be added to future settings page. For now, just edit the bool between runs to test both control schemes
+    bool voiceEnable;
+    /*************************************************************************/
 
     // Tail Prefab
     public GameObject tailPrefab;
     // Use this for initialization
     void Start()
     {
-        MusicClass.instance.StopMusic(mainTheme);
+        //MusicClass.instance.StopMusic(menuSong);
         sandbox = false;
-   
+
 		Debug.Log("Start");
 
 		// Move the Snake every 300ms
 		if (System.Math.Abs(Settings.speedVal) < 0.0001) {
             Settings.speedVal = 0.1f;
         }
-        //voiceEnable = Settings.voiceVal;
-        voiceEnable = false;
+		voiceEnable = Settings.voiceVal;
 
 		if (voiceEnable == false)
 		{
@@ -116,7 +111,6 @@ public class Snake : MonoBehaviour
 		score = 0;
         answerDisplay.SetText(score.ToString());
         SpawnFood();
-
         InvokeRepeating("SpawnTrap", 2, 7);
         InvokeRepeating("RemoveTrap", 60, 15);
         InvokeRepeating("Move", Settings.speedVal, Settings.speedVal);
@@ -162,6 +156,9 @@ public class Snake : MonoBehaviour
             Destroy(coll.gameObject);
             score += 100;
 
+            if (score == 300) {
+                SceneManager.LoadScene(9);
+            }
             //insert eat noise clip ehre
 
             answerDisplay.SetText(score.ToString());
@@ -174,10 +171,10 @@ public class Snake : MonoBehaviour
 
             // ToDo 'You lose' screen
             Debug.Log("You Lose");
-         
+
             if (sandbox == false)
             {
-                MusicClass.instance.PlayMusic(mainTheme);
+                MusicClass.instance.PlayMusic(menuSong);
                 SceneManager.LoadScene(5);
             }
 

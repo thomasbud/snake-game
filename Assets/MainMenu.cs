@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     // Start is called before the first frame update
+
+    public AudioClip menuSong;
+
     public void onMainClick()
     {
         SceneManager.LoadScene(0);
@@ -13,6 +16,7 @@ public class MainMenu : MonoBehaviour
 
     public void onPlayClick()
     {
+        MusicClass.instance.StopMusic(menuSong);
         SceneManager.LoadScene(1);
     }
 
@@ -46,14 +50,15 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene(8);
     }
 
+    public void onNextLevelClick()
+    {
+        MusicClass.instance.PlayMusic(menuSong);
+        SceneManager.LoadScene(10);
+    }
+
     public void onQuitClick()
     {
         Application.Quit();
-    }
-
-    public void onAdvanceClick()
-    {
-        SceneManager.LoadScene(9);
     }
 
 }
