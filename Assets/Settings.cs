@@ -21,7 +21,18 @@ public class Settings : MonoBehaviour
 
     void Start()
     {
-        speedVal = 0.1f;
+        if(PlayerPrefs.GetInt("Voice") == 1)
+        {
+            voiceToggle.isOn = true;
+            voiceVal = true;
+        }
+        else
+        {
+            voiceToggle.isOn = false;
+            voiceVal = false;
+        }
+        speedVal = PlayerPrefs.GetFloat("Speed", 0.1f);
+        slider.value = PlayerPrefs.GetFloat("Speed", 0.1f);
 
         keyBinds.Add("Up", (KeyCode)System.Enum.Parse(typeof(KeyCode),PlayerPrefs.GetString("Up", "W")));
         keyBinds.Add("Left", (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Left", "A")));
@@ -83,6 +94,16 @@ public class Settings : MonoBehaviour
             //Debug.Log(tempKey.Value.ToString());
             //Debug.Log(PlayerPrefs.GetString("Up"));
             Debug.Log(tempKey.Key + ": " + tempKey.Value.ToString() + ":: " + PlayerPrefs.GetString(tempKey.Key.ToString()));
+        }
+
+        PlayerPrefs.SetFloat("Speed", slider.value);
+        if(voiceVal)
+        {
+            PlayerPrefs.SetInt("Voice", 1);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("Voice", 0);
         }
 
         PlayerPrefs.Save();

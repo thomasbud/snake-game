@@ -22,9 +22,12 @@ public class Snake : MonoBehaviour
 
     //sound objs
     public AudioSource eatSound;
+    private static int gameLevel = 1;
 
     // Current Movement Direction
     // (by default it moves to the right)
+    public Slider slider;
+    public float speedVal2;
     public GameObject foodPrefab;
     public GameObject trapPrefab;
 
@@ -75,9 +78,11 @@ public class Snake : MonoBehaviour
 
 		// Move the Snake every 300ms
 		if (System.Math.Abs(Settings.speedVal) < 0.0001) {
-            Settings.speedVal = 0.1f;
+            Settings.speedVal = PlayerPrefs.GetFloat("Speed", 0.1f);
         }
-		voiceEnable = Settings.voiceVal;
+        slider.value = PlayerPrefs.GetFloat("Speed", 0.1f);
+        speedVal2 = Settings.speedVal;
+        voiceEnable = Settings.voiceVal;
 
 		if (voiceEnable == false)
 		{
@@ -97,10 +102,10 @@ public class Snake : MonoBehaviour
         SpawnFood();
         InvokeRepeating("SpawnTrap", 2, 7);
         InvokeRepeating("RemoveTrap", 60, 15);
-        InvokeRepeating("Move", Settings.speedVal, Settings.speedVal);
+        InvokeRepeating("Move", speedVal2, speedVal2);
 
 
-		KeyCode rightKey = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Right", "D"));
+        KeyCode rightKey = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Right", "D"));
 		KeyCode upKey = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Up", "W"));
 		KeyCode leftKey = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Left", "A"));
 		KeyCode downKey = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Down", "S"));
@@ -123,9 +128,15 @@ public class Snake : MonoBehaviour
             recognizer.OnPhraseRecognized += Recognizer_OnPhraseRecognized;
             recognizer.Start();
         }
-		/*************************************************************************/
+        /*************************************************************************/
+    }
 
-	}
+    public void changeSpeed() {
+        CancelInvoke();
+        InvokeRepeating("SpawnTrap", 2, 7);
+        InvokeRepeating("RemoveTrap", 60, 15);
+        InvokeRepeating("Move", speedVal2, speedVal2);
+    }
 
 	void OnTriggerEnter2D(Collider2D coll)
     {
@@ -140,8 +151,14 @@ public class Snake : MonoBehaviour
             Destroy(coll.gameObject);
             score += 100;
 
-            if (score == 300) {
+            if (score == 300 && gameLevel == 1)
+            {
+                gameLevel++;
                 SceneManager.LoadScene(9);
+            }
+            else if (score == 300 && gameLevel == 2) {
+                gameLevel = 1;
+                SceneManager.LoadScene(11);
             }
             //insert eat noise clip ehre
 
@@ -155,6 +172,7 @@ public class Snake : MonoBehaviour
 
             // ToDo 'You lose' screen
             Debug.Log("You Lose");
+            gameLevel = 1;
             SceneManager.LoadScene(5);
         }
     }
@@ -174,22 +192,22 @@ public class Snake : MonoBehaviour
 		//	else if ((Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W)) && dir != -Vector2.up)
 		//		dir = Vector2.up;
 		//}
-		if (true)
+		if (!Settings.voiceVal)
 		{
-			if (Input.GetKey(keyBinds["Right"]))
+			if (Input.GetKey(keyBinds["Right"]) && dir != -Vector2.right)
 			{
 				Debug.Log("KEY PRESS");
 				dir = Vector2.right;
 			}
-			else if (Input.GetKey(keyBinds["Down"]))
+			else if (Input.GetKey(keyBinds["Down"]) && dir != Vector2.up)
 			{
 				dir = -Vector2.up;    // '-up' means 'down'
 			}
-			else if (Input.GetKey(keyBinds["Left"]))
+			else if (Input.GetKey(keyBinds["Left"]) && dir != Vector2.right)
 			{
 				dir = -Vector2.right; // '-right' means 'left'
 			}
-			else if (Input.GetKey(keyBinds["Up"]))
+			else if (Input.GetKey(keyBinds["Up"]) && dir != -Vector2.up)
 			{
 				dir = Vector2.up;
 			}
@@ -209,6 +227,7 @@ public class Snake : MonoBehaviour
                 dir = Vector2.up;
         }
         /*************************************************************************/
+        speedVal2 = slider.value;
     }
 
     void SpawnFood()
