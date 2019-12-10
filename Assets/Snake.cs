@@ -19,7 +19,7 @@ public class Snake : MonoBehaviour
     protected PhraseRecognizer recognizer;
     protected string word = "right";
     /*************************************************************************/
-
+    public AudioClip menuSong;
     //sound objs
     public AudioSource eatSound;
     private static int gameLevel = 1;
@@ -60,6 +60,19 @@ public class Snake : MonoBehaviour
     List<Collider2D> traps = new List<Collider2D>();
     List<Transform> tail = new List<Transform>();
 
+    public bool sandbox;
+
+
+    public void Sandbox()
+    {
+        sandbox = !sandbox;
+    }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
     // Did the snake eat something?
     bool ate = false;
 
@@ -74,6 +87,9 @@ public class Snake : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        //MusicClass.instance.StopMusic(menuSong);
+        sandbox = false;
+
 		Debug.Log("Start");
 
 		// Move the Snake every 300ms
@@ -172,8 +188,15 @@ public class Snake : MonoBehaviour
 
             // ToDo 'You lose' screen
             Debug.Log("You Lose");
-            gameLevel = 1;
-            SceneManager.LoadScene(5);
+
+
+            if (sandbox == false)
+            {
+                MusicClass.instance.PlayMusic(menuSong);
+                SceneManager.LoadScene(5);
+            }
+
+            dir = Vector2.zero;
         }
     }
 

@@ -488,6 +488,10 @@ PrefabInstance:
       propertyPath: slider
       value: 
       objectReference: {fileID: 414188414}
+      propertyPath: menuSong
+      value: 
+      objectReference: {fileID: 8300000, guid: 4e4d0fadf3d024a359e6567fc36a438f, type: 3}
+
     - target: {fileID: 3409099081633385709, guid: 877b3eae9991d42bfae372282a44b50a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -966,8 +970,8 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &542533067
-RectTransform:
+--- !u!82 &568385654
+AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
